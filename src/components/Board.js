@@ -14,6 +14,7 @@ const Board = ({
   const [activeId, setActiveId] = useState(null);
   const [showAddListForm, setShowAddListForm] = useState(false);
   const [newListTitle, setNewListTitle] = useState('');
+  const [query, setQuery] = useState('');
 
   const handleDragStart = (event) => {
     setActiveId(event.active.id);
@@ -140,6 +141,13 @@ const Board = ({
           </button>
           <h1 className="board-title">{board.name}</h1>
           <div className="board-actions">
+            <input
+              className="input"
+              placeholder="Search tasks..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              style={{minWidth:'220px'}}
+            />
             <button 
               className={`btn btn-secondary ${isDarkMode ? 'dark-mode' : ''}`}
               onClick={onToggleDarkMode}
@@ -161,7 +169,7 @@ const Board = ({
               {board.lists.map(list => (
                 <List
                   key={list.id}
-                  list={list}
+                  list={{...list, cards: list.cards.filter(c => c.title.toLowerCase().includes(query.toLowerCase()) || c.description.toLowerCase().includes(query.toLowerCase()))}}
                   onUpdateList={updateList}
                   onDeleteList={deleteList}
                   isDarkMode={isDarkMode}

@@ -82,6 +82,25 @@ function App() {
     setIsDarkMode(!isDarkMode);
   };
 
+  const renameBoard = (boardId, newName) => {
+    setBoards(boards.map(board =>
+      board.id === boardId ? { ...board, name: newName } : board
+    ));
+    if (currentBoard && currentBoard.id === boardId) {
+      setCurrentBoard({ ...currentBoard, name: newName });
+    }
+  };
+
+  const replaceBoards = (newBoards) => {
+    if (Array.isArray(newBoards)) {
+      setBoards(newBoards);
+      if (currentBoard) {
+        const match = newBoards.find(b => b.id === currentBoard.id);
+        setCurrentBoard(match || null);
+      }
+    }
+  };
+
   return (
     <div className={`app ${isDarkMode ? 'dark-mode' : ''}`}>
       {currentBoard ? (
@@ -98,6 +117,8 @@ function App() {
           onCreateBoard={createBoard}
           onDeleteBoard={deleteBoard}
           onSelectBoard={setCurrentBoard}
+          onRenameBoard={renameBoard}
+          onReplaceBoards={replaceBoards}
           isDarkMode={isDarkMode}
           onToggleDarkMode={toggleDarkMode}
         />

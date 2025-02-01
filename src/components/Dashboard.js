@@ -6,11 +6,17 @@ const Dashboard = ({
   onCreateBoard, 
   onDeleteBoard, 
   onSelectBoard, 
+  onRenameBoard,
+  onReplaceBoards,
   isDarkMode, 
   onToggleDarkMode 
 }) => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newBoardName, setNewBoardName] = useState('');
+  const [renamingId, setRenamingId] = useState(null);
+  const [renameValue, setRenameValue] = useState('');
+  const [showImport, setShowImport] = useState(false);
+  const [importText, setImportText] = useState('');
 
   const handleCreateBoard = (e) => {
     e.preventDefault();
@@ -74,12 +80,32 @@ const Dashboard = ({
                   onClick={() => onSelectBoard(board)}
                 >
                   <div className="board-card-header">
-                    <h3 className="board-title">{board.name}</h3>
+                    {renamingId === board.id ? (
+                      <form onSubmit={(e) => {e.preventDefault(); if (renameValue.trim()) { onRenameBoard(board.id, renameValue.trim()); setRenamingId(null); }}}>
+                        <input
+                          className="input"
+                          value={renameValue}
+                          onChange={(e) => setRenameValue(e.target.value)}
+                          onClick={(e) => e.stopPropagation()}
+                          autoFocus
+                        />
+                      </form>
+                    ) : (
+                      <h3 className="board-title">{board.name}</h3>
+                    )}
                     <button 
                       className="btn btn-danger btn-sm"
                       onClick={(e) => handleDeleteBoard(board.id, e)}
                     >
                       ×
+                    </button>
+                  </div>
+                  <div className="board-stats">
+                    <button
+                      className="btn btn-secondary btn-sm"
+                      onClick={(e) => { e.stopPropagation(); setRenamingId(board.id); setRenameValue(board.name); }}
+                    >
+                      Rename
                     </button>
                   </div>
                   <div className="board-stats">
@@ -144,6 +170,48 @@ const Dashboard = ({
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      <div className="dashboard-main" style={{maxWidth: '1200px', margin: '0 auto', padding: '0 20px'}}>
+        <div style={{display:'flex', gap: '8px', marginTop: '8px'}}>
+          <button className="btn btn-secondary" onClick={() => {
+            const data = JSON.stringify(boards, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'task-manager-export.json';
+            a.click();
+            URL.revokeObjectURL(url);
+          }}>Export JSON</button>
+          <button className="btn btn-primary" onClick={() => setShowImport(true)}>Import JSON</button>
+        </div>
+      </div>
+
+      {showImport && (
+        <div className="modal-overlay" onClick={() => setShowImport(false)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2 className="modal-title">Import Boards JSON</h2>
+              <button className="modal-close" onClick={() => setShowImport(false)}>×</button>
+            </div>
+            <div className="form-group">
+              <label>Paste exported JSON</label>
+              <textarea className="input" rows="10" value={importText} onChange={(e)=>setImportText(e.target.value)} />
+            </div>
+            <div className="form-actions">
+              <button className="btn btn-secondary" onClick={()=>setShowImport(false)}>Cancel</button>
+              <button className="btn btn-success" onClick={()=>{
+                try {
+                  const parsed = JSON.parse(importText);
+                  onReplaceBoards(parsed);
+                  setShowImport(false);
+                  setImportText('');
+                } catch(err) { alert('Invalid JSON'); }
+              }}>Import</button>
+            </div>
           </div>
         </div>
       )}
