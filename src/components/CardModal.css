@@ -1,0 +1,80 @@
+/* Card Modal styles */
+.card-modal {
+  max-width: 600px;
+  width: 90%;
+}
+
+.card-modal.dark-mode {
+  background-color: #2d2d2d;
+  color: #ffffff;
+}
+
+.modal-content {
+  margin-bottom: 24px;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: inherit;
+}
+
+.card-meta {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e1e5e9;
+}
+
+.card-modal.dark-mode .card-meta {
+  border-top-color: #444;
+}
+
+.text-muted {
+  color: #6c757d;
+  font-size: 12px;
+}
+
+.card-modal.dark-mode .text-muted {
+  color: #cccccc;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid #e1e5e9;
+}
+
+.card-modal.dark-mode .modal-footer {
+  border-top-color: #444;
+}
+
+.footer-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .card-modal {
+    width: 95%;
+    padding: 16px;
+  }
+  
+  .modal-footer {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+  
+  .footer-actions,
+  .form-actions {
+    justify-content: center;
+  }
+}
