@@ -1,0 +1,46 @@
+/* App-specific styles */
+.app {
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.app.dark-mode {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+.app.dark-mode .btn-primary {
+  background-color: #0c7b93;
+}
+
+.app.dark-mode .btn-primary:hover {
+  background-color: #0a6b7f;
+}
+
+.app.dark-mode .input {
+  background-color: #2d2d2d;
+  border-color: #444;
+  color: #ffffff;
+}
+
+.app.dark-mode .input:focus {
+  border-color: #0c7b93;
+  box-shadow: 0 0 0 2px rgba(12, 123, 147, 0.2);
+}
+
+.app.dark-mode .modal {
+  background-color: #2d2d2d;
+  color: #ffffff;
+}
+
+.app.dark-mode .modal-title {
+  color: #ffffff;
+}
+
+.app.dark-mode .modal-close {
+  color: #cccccc;
+}
+
+.app.dark-mode .modal-close:hover {
+  color: #ffffff;
+}
